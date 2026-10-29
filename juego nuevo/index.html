@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para tí, mailov</title>
+  <!-- Tipografía estilo manuscrito y fuentes cute -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --rosa-fondo: #fff0f5;
+      --rosa-suave: #ffd1dc;
+      --rosa-medio: #f4acb7;
+      --blanco-translucido: rgba(255, 255, 255, 0.92);
+      --sombra: 0 10px 25px rgba(220, 100, 130, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffe6eb 0%, #ffd1dc 50%, #fff0f5 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fondo animado de flores/corazones */
+    .bg-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart-bg {
+      position: absolute;
+      color: rgba(255, 182, 193, 0.5);
+      font-size: 20px;
+      animation: float 8s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ESTILOS DE TARJETAS / SECCIONES */
+    .card {
+      background: var(--blanco-translucido);
+      backdrop-filter: blur(8px);
+      border: 2px solid #ffe3eb;
+      border-radius: 25px;
+      padding: 25px 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--sombra);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      display: none;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* IMÁGENES DECORATIVAS GENERALES */
+    .png-decoration {
+      display: block;
+      margin: 10px auto;
+      max-width: 90px;
+      max-height: 90px;
+      object-fit: contain;
+    }
+
+    /* INTERFAZ 1: INICIO */
+    .title-main {
+      font-family: 'Pacifico', cursive;
+      color: #b54a62;
+      font-size: 1.9rem;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .input-group {
+      margin-bottom: 12px;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid var(--rosa-medio);
+      border-radius: 50px;
+      outline: none;
+      text-align: center;
+      font-size: 1rem;
+      color: #666;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    input[type="password"]:focus {
+      border-color: #e56b81;
+      box-shadow: 0 0 10px rgba(229, 107, 129, 0.3);
+    }
+
+    .subtitle-small {
+      font-size: 0.85rem;
+      color: #c07080;
+      font-weight: 600;
+      margin-top: 6px;
+      margin-bottom: 20px;
+    }
+
+    /* BOTONES GLOBALES */
+    .btn {
+      background: linear-gradient(45deg, #ff9a9e, #fecfef);
+      color: #721c24;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn:hover, .btn:active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 154, 158, 0.6);
+      background: linear-gradient(45deg, #fecfef, #ff9a9e);
+    }
+
+    .error-msg {
+      color: #e63946;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    /* INTERFAZ 2: CARTA CON FONDO DE MINECRAFT */
+/* INTERFAZ 2: CARTA CON FONDO DE MINECRAFT */
+    .letter-paper-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      background-image: url('carta-minecraft.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      margin: 10px 0 15px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .letter-text-overlay {
+      position: absolute;
+      top: 31%;
+      left: 14%;
+      right: 14%;
+      bottom: 20%;
+      overflow-y: auto;
+      text-align: left;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #3b2010;
+      line-height: 2.15rem;
+      white-space: pre-line;
+      padding-right: 5px;
+    }
+    .letter-text-overlay::-webkit-scrollbar-thumb {
+      background: #c28859;
+      border-radius: 4px;
+    }
+
+    /* INTERFAZ 3: PREGUNTA */
+    .title-question {
+      font-family: 'Pacifico', cursive;
+      color: #a83250;
+      font-size: 2rem;
+      margin: 15px 0 25px 0;
+    }
+
+    .buttons-container {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      min-height: 80px;
+    }
+
+    .btn-yes {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3);
+      color: white;
+      width: 45%;
+      font-size: 1.2rem;
+    }
+
+    .btn-no {
+      background: #e0e0e0;
+      color: #666;
+      width: 45%;
+      font-size: 1.1rem;
+      position: absolute;
+      right: 5%;
+      transition: all 0.15s ease;
+    }
+
+    /* INTERFAZ 4: RESULTADO */
+    .title-success {
+      font-family: 'Pacifico', cursive;
+      color: #d63384;
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+    }
+
+    .decorations-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .decorations-group img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fondo animado -->
+  <div class="bg-hearts" id="bgHearts"></div>
+
+  <!-- INTERFAZ 1: INICIO -->
+  <div class="card active" id="sec-1">
+    <img src="decoracion1.png" class="png-decoration" alt="decoración">
+
+    <h1 class="title-main">esta carta es para tí, mailov</h1>
+    
+    <div class="input-group">
+      <input type="password" id="passInput" placeholder="Escribe la contraseña...">
+      <p class="subtitle-small">Damön, mi amor</p>
+    </div>
+
+    <button class="btn" onclick="verificarPassword()">Entrar 💕</button>
+    <p class="error-msg" id="errorMsg">Contraseña incorrecta, ¡inténtalo de nuevo, hermoso! 💖</p>
+  </div>
+
+
+  <!-- INTERFAZ 2: CARTA -->
+  <div class="card" id="sec-2">
+    <img src="decoracion2.png" class="png-decoration" alt="decoración">
+
+    <div class="letter-paper-wrapper">
+      <div class="letter-text-overlay">
+<!-- 📝 ESCRIBE TU CARTA AQUÍ ABAJO: -->
+Hola mi amor,
+Estoy tan feliz de haberte conocido, eres encantador y divertido, me fascina hablar contigo y me duele tanto no haberte conocido antes.
+Gracias por ser mi nueva y única persona favorita, por sacarme tantas sonrisas y por hacer mi mundo más bonito.
+¡Eres lo mejor que me ha pasado! 💘💘💘
+      </div>
+    </div>
+
+    <img src="decoracion3.png" class="png-decoration" alt="decoración">
+
+    <button class="btn" onclick="cambiarSeccion('sec-2', 'sec-3')">tocame !!! </button>
+  </div>
+
+
+  <!-- INTERFAZ 3: PREGUNTA -->
+  <div class="card" id="sec-3">
+    <img src="decoracion4.png" class="png-decoration" alt="decoración">
+
+    <h2 class="title-question">¿Quieres ser mi partner?</h2>
+    
+    <img src="decoracion5.png" class="png-decoration" alt="decoración">
+
+    <div class="buttons-container" id="btnContainer">
+      <button class="btn btn-yes" onclick="cambiarSeccion('sec-3', 'sec-4')">si!!! </button>
+      <button class="btn btn-no" id="btnNo" onmouseover="escaparBoton()" onclick="escaparBoton()" ontouchstart="escaparBoton()">No... </button>
+    </div>
+  </div>
+
+
+  <!-- INTERFAZ 4: LO SABÍA -->
+  <div class="card" id="sec-4">
+    <h2 class="title-success">Lo sabia!!! 💘💘💘</h2>
+    
+    <div class="decorations-group">
+      <img src="decoracion6.png" alt="decoración">
+      <img src="decoracion7.png" alt="decoración">
+      <img src="decoracion8.png" alt="decoración">
+    </div>
+
+<p style="color: #8c3a4d; font-weight: 600; font-size: 1.1rem; margin-top: 15px;">
+      ¡Sabía que dirías que sí, mi amor! Te amo muchísimo.
+    </p>
+  </div>
+
+
+  <!-- LÓGICA EN JAVASCRIPT -->
+  <script>
+    // Se usó 'CONTRASENA' sin la letra Ñ para evitar errores de sintaxis
+    const CONTRASENA_CORRECTA = "mihermosohusband";
+
+    // Fondo animado
+    function crearCorazones() {
+      const container = document.getElementById('bgHearts');
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart-bg');
+        heart.innerHTML = '🌸';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        heart.style.fontSize = (Math.random() * 15 + 12) + 'px';
+        container.appendChild(heart);
+      }
+    }
+    crearCorazones();
+
+    function cambiarSeccion(actual, siguiente) {
+      document.getElementById(actual).classList.remove('active');
+      document.getElementById(siguiente).classList.add('active');
+    }
+
+    function verificarPassword() {
+      const input = document.getElementById('passInput').value.trim().toLowerCase();
+      const errorMsg = document.getElementById('errorMsg');
+
+      if (input === CONTRASENA_CORRECTA.toLowerCase()) {
+        errorMsg.style.display = 'none';
+        cambiarSeccion('sec-1', 'sec-2');
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    document.getElementById('passInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        verificarPassword();
+      }
+    });
+
+    // Botón "no" escurridizo
+    function escaparBoton() {
+      const btnNo = document.getElementById('btnNo');
+      const container = document.getElementById('btnContainer');
+      
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = btnNo.getBoundingClientRect();
+
+      const newX = Math.random() * (containerRect.width - btnRect.width);
+      const newY = (Math.random() - 0.5) * 140;
+
+      btnNo.style.position = 'absolute';
+      btnNo.style.left = `${newX}px`;
+      btnNo.style.top = `${newY}px`;
+    }
+  </script>
+</body>
+</html>
